@@ -12,11 +12,7 @@ class Account @Inject()(silhouette: Silhouette[CookieEnv]) extends InjectedContr
         Ok(views.html.account.login())
     }
 
-    def login = Action {
-        Ok("")
-    }
+    def login = TODO
 
-    def logout = Action {
-        Ok("")
-    }
+    def logout = TODO
 }

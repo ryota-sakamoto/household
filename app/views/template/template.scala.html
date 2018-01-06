@@ -4,10 +4,64 @@
     <head>
         <meta charset="utf-8">
         <title>@title</title>
+        <meta name="viewport" content="width=device-width">
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.6.1/css/bulma.min.css">
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+        <script src="https://code.jquery.com/jquery-3.2.1.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
     </head>
     <body>
-        @body
+        <nav class="navbar" role="navigation" aria-label="main navigation">
+            <div class="container">
+                <div class="navbar-brand">
+                    <a class="navbar-item" href="@routes.Home.index()">
+                        <i class="fa fa-home fa-2x" aria-hidden="true"></i>
+                    </a>
+
+                    <button class="button navbar-burger">
+                        <span></span>
+                        <span></span>
+                        <span></span>
+                    </button>
+                </div>
+                <div class="navbar-menu">
+                    <div class="navbar-end">
+                    @if(false){ @* TODO *@
+                        <a class="navbar-item" href="@routes.Account.loginIndex()">
+                            <i class="fa fa-sign-out fa-2x" aria-hidden="true"></i>
+                            ログアウト
+                        </a>
+                    } else {
+                        <a class="navbar-item" href="@routes.Account.loginIndex()">
+                            <i class="fa fa-sign-in fa-2x" aria-hidden="true"></i>
+                            ログイン
+                        </a>
+                    }
+                    </div>
+                </div>
+            </div>
+        </nav>
+        <div class="container">
+            <div id="body">
+                @body
+            </div>
+        </div>
     </body>
+    <style type="text/css">
+        .fa {
+            margin-right: 5px;
+        }
+
+        body {
+            height: 100%;
+        }
+    </style>
+    <script>
+        $(document).on("click", ".navbar-burger", (e) => {
+            if ($(".navbar-menu").hasClass("is-active")) {
+                $(".navbar-menu, .navbar-burger").removeClass("is-active");
+            } else {
+                $(".navbar-menu, .navbar-burger").addClass("is-active");
+            }
+        });
+    </script>
 </html>
