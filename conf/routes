@@ -1,0 +1,6 @@
+GET     /                           controllers.Home.index
+GET     /login                      controllers.Account.loginIndex
+POST    /login                      controllers.Account.login
+GET     /logout                     controllers.Account.logout
+
+GET     /assets/*file               controllers.Assets.versioned(path="/public", file: Asset)
