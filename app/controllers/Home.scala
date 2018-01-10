@@ -8,7 +8,10 @@ import silhouette.CookieEnv
 
 @Singleton
 class Home @Inject()(silhouette: Silhouette[CookieEnv]) extends InjectedController {
-    def index() = silhouette.SecuredAction  { implicit request =>
-        Ok(views.html.home.index("Hello World"))
+    def index() = silhouette.UserAwareAction  { implicit request =>
+        request.identity match {
+            case Some(user) => Ok(views.html.home.index("online"))
+            case None => Ok(views.html.home.index("offline"))
+        }
     }
 }

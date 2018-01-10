@@ -12,6 +12,7 @@ libraryDependencies ++= Seq(
     jdbc,
     guice,
     evolutions,
+    ehcache,
     "com.h2database" % "h2" % "1.4.196",
     "com.mohiva" %% "play-silhouette" % "5.0.0",
     "com.mohiva" %% "play-silhouette-password-bcrypt" % "5.0.0",
