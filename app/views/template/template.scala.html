@@ -1,4 +1,7 @@
-@(title: String = "家計簿")(body: Html)
+@import com.mohiva.play.silhouette.api.actions.UserAwareRequest
+@import silhouette.CookieEnv
+
+@(title: String = "家計簿")(body: Html)(implicit request: UserAwareRequest[CookieEnv, AnyContent])
 
 <html>
     <head>
@@ -7,7 +10,6 @@
         <meta name="viewport" content="width=device-width">
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.6.1/css/bulma.min.css">
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
-        <script src="https://code.jquery.com/jquery-3.2.1.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
     </head>
     <body>
         <nav class="navbar" role="navigation" aria-label="main navigation">
@@ -25,8 +27,8 @@
                 </div>
                 <div class="navbar-menu">
                     <div class="navbar-end">
-                    @if(false){ @* TODO *@
-                        <a class="navbar-item" href="@routes.Account.loginIndex()">
+                    @if(request.identity.isDefined){
+                        <a class="navbar-item" href="@routes.Account.logout()">
                             <i class="fa fa-sign-out fa-2x" aria-hidden="true"></i>
                             ログアウト
                         </a>
@@ -56,11 +58,17 @@
         }
     </style>
     <script>
-        $(document).on("click", ".navbar-burger", (e) => {
-            if ($(".navbar-menu").hasClass("is-active")) {
-                $(".navbar-menu, .navbar-burger").removeClass("is-active");
+        document.querySelector(".navbar-burger").addEventListener("click", () => {
+            const menu = document.querySelector(".navbar-menu");
+            const dom = document.querySelectorAll(".navbar-menu, .navbar-burger");
+            if (menu.classList.contains("is-active")) {
+                dom.forEach((d) => {
+                    d.classList.remove("is-active");
+                });
             } else {
-                $(".navbar-menu, .navbar-burger").addClass("is-active");
+                dom.forEach((d) => {
+                    d.classList.add("is-active");
+                });
             }
         });
     </script>

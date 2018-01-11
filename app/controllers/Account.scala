@@ -10,7 +10,7 @@ import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
 class Account @Inject()(silhouette: Silhouette[CookieEnv], implicit val ec: ExecutionContext) extends InjectedController {
-    def loginIndex = silhouette.UnsecuredAction { implicit request =>
+    def loginIndex = silhouette.UserAwareAction { implicit request =>
         Ok(views.html.account.login())
     }
 

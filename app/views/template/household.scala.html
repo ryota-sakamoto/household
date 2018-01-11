@@ -2,6 +2,7 @@
 @import silhouette.CookieEnv
 
 @()(implicit request: UserAwareRequest[CookieEnv, AnyContent])
-@template.template("トップページ") {
-    @_index()
+
+@template("トップページ") {
+    @_household()
 }

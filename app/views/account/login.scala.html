@@ -1,3 +1,8 @@
-@template.template("ログイン画面") {
+@import com.mohiva.play.silhouette.api.actions.UserAwareRequest
+@import silhouette.CookieEnv
+
+@()(implicit request: UserAwareRequest[CookieEnv, AnyContent])
+
+@template.template("ログイン") {
     @account._login()
 }
