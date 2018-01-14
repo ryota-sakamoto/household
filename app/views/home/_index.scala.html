@@ -3,4 +3,33 @@
 
 @()(implicit request: UserAwareRequest[CookieEnv, AnyContent])
 
-Login now
+<canvas id="chart" width="400" height="400"></canvas>
+
+<button class="button" id="get-data">GET</button>
+
+<script>
+    const ctx = document.getElementById("chart")
+    const dom = document.getElementById("get-data")
+
+    dom.addEventListener("click", () => {
+        fetch("@routes.Aggregate.month()", {
+            credentials: 'include'
+        }).then((res) => {return res.json()}).then((json) => {
+            new Chart(ctx, {
+                type: "line",
+                data: {
+                    labels: json.data.map((d) => {return d.month}),
+                    datasets: [
+                        {
+                            label: json.title,
+                            data: json.data.map((d) => {return d.value}),
+                            fill: false
+                        }
+                    ]
+                }
+            })
+        })
+    })
+
+    dom.click()
+</script>

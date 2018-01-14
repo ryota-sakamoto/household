@@ -3,4 +3,6 @@ GET     /login                      controllers.Account.loginIndex
 POST    /login                      controllers.Account.login
 GET     /logout                     controllers.Account.logout
 
+GET     /api/aggregate/month        controllers.Aggregate.month
+
 GET     /assets/*file               controllers.Assets.versioned(path="/public", file: Asset)
