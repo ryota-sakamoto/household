@@ -12,6 +12,17 @@ import scala.concurrent.Future
 class UserServiceImpl @Inject()(implicit val ec: ExecutionContext, cache: AsyncCacheApi) extends UserService {
     override def save(user: User): Option[User] = ???
 
+    override def retrieve(email: String, password: String): Option[User] = {
+        Some(User(
+            loginInfo = LoginInfo("id", email),
+            firstName = None,
+            lastName = None,
+            fullName = None,
+            email = None,
+            avatarURL = None
+        )) // TODO
+    }
+
     override def retrieve(loginInfo: LoginInfo): Future[Option[User]] = {
         cache.get[User](loginInfo.providerKey).flatMap {
             case Some(user) => Future(Some(user))

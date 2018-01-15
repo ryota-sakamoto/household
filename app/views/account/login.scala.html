@@ -1,8 +1,8 @@
 @import com.mohiva.play.silhouette.api.actions.UserAwareRequest
 @import silhouette.CookieEnv
 
-@()(implicit request: UserAwareRequest[CookieEnv, AnyContent])
+@(login_form: Form[Login])(implicit request: UserAwareRequest[CookieEnv, AnyContent], messages: MessagesProvider)
 
 @template.template("ログイン") {
-    @account._login()
+    @account._login(login_form)
 }
