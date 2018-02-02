@@ -1,9 +1,12 @@
 package models.service
 
 import com.mohiva.play.silhouette.api.services.IdentityService
-import com.mohiva.play.silhouette.impl.User
+import models.User
+import play.api.db.slick.HasDatabaseConfigProvider
+import slick.jdbc.JdbcProfile
+import scala.concurrent.Future
 
-trait UserService extends IdentityService[User] {
-    def retrieve(email: String, password: String): Option[User]
-    def save(user: User): Option[User]
+trait UserService extends IdentityService[User] with HasDatabaseConfigProvider[JdbcProfile] {
+    def retrieve(email: String, password: String): Future[Option[User]]
+    def save(user: User): Unit
 }

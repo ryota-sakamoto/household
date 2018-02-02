@@ -11,7 +11,12 @@ import models.Login
 @Singleton
 class Account @Inject()(silhouette: Silhouette[CookieEnv], implicit val ec: ExecutionContext, messagesAction: MessagesActionBuilder) extends InjectedController with I18nSupport {
     def loginIndex = silhouette.UserAwareAction { implicit request =>
-        Ok(views.html.account.login(Login.login_form))
+        val m = request.flash.get("message")
+        Ok(views.html.account.login(Login.login_form, m))
+    }
+
+    def registerIndex = silhouette.UserAwareAction { implicit request =>
+        Ok(views.html.account.login(Login.login_form, None))
     }
 
     def login = Action.async { implicit request =>
@@ -29,9 +34,13 @@ class Account @Inject()(silhouette: Silhouette[CookieEnv], implicit val ec: Exec
                     value <- authenticator_service.init(authenticator)
                     result <- authenticator_service.embed(value, Redirect(routes.Home.index()))
                 } yield result
-            case None => Future(Redirect(routes.Account.loginIndex()))
+            case None => Future(Redirect(routes.Account.loginIndex()).flashing("message" -> "Login Failed"))
         }
     }
+
+//    def register = Action.async { implicit request =>
+//
+//    }
 
     def logout = silhouette.SecuredAction.async { implicit request =>
         val service = silhouette.env.authenticatorService

@@ -2,47 +2,38 @@ package models.service
 
 import com.mohiva.play.silhouette.api.LoginInfo
 import javax.inject.Inject
-
-import com.mohiva.play.silhouette.impl.User
 import play.api.cache.AsyncCacheApi
-
+import play.api.db.slick.DatabaseConfigProvider
 import scala.concurrent.ExecutionContext
 import scala.concurrent.Future
+import models.User
 
-class UserServiceImpl @Inject()(implicit val ec: ExecutionContext, cache: AsyncCacheApi) extends UserService {
-    override def save(user: User): Option[User] = ???
+class UserServiceImpl @Inject()(val dbConfigProvider: DatabaseConfigProvider)(implicit val ec: ExecutionContext, cache: AsyncCacheApi) extends UserService {
+    import profile.api._
 
-    override def retrieve(email: String, password: String): Option[User] = {
-        Some(User(
-            loginInfo = LoginInfo("id", email),
-            firstName = None,
-            lastName = None,
-            fullName = None,
-            email = None,
-            avatarURL = None
-        )) // TODO
+    private val users = TableQuery[Users]
+
+    override def save(user: User): Unit = {
+        db.run(users += user)
+    }
+
+    def retrieve(email: String, password: String): Future[Option[User]] = {
+        db.run(users.filter(_.email === email).result.headOption)
     }
 
     override def retrieve(loginInfo: LoginInfo): Future[Option[User]] = {
         cache.get[User](loginInfo.providerKey).flatMap {
             case Some(user) => Future(Some(user))
             case None => Future {
-                val user_opt: Option[User] = Some(User(
-                    loginInfo = loginInfo,
-                    firstName = None,
-                    lastName = None,
-                    fullName = None,
-                    email = None,
-                    avatarURL = None
-                )) // TODO
-
-                user_opt match {
-                    case Some(user) => cache.set(loginInfo.providerID, user)
-                    case None =>
-                }
-
-                user_opt
+                None
             }
         }
+    }
+
+    private[this] class Users(tag: Tag) extends Table[User](tag: Tag, "user") {
+        def id = column[Int]("id", O.PrimaryKey)
+        def email = column[String]("email", O.Unique)
+
+        def * = (id, email) <> (User.tupled, User.unapply)
     }
 }

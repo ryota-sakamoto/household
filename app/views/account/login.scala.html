@@ -1,8 +1,50 @@
 @import com.mohiva.play.silhouette.api.actions.UserAwareRequest
 @import silhouette.CookieEnv
+@import helper._
 
-@(login_form: Form[Login])(implicit request: UserAwareRequest[CookieEnv, AnyContent], messages: MessagesProvider)
+@(login_form: Form[Login], message: Option[String])(implicit request: UserAwareRequest[CookieEnv, AnyContent], messages: MessagesProvider)
+@implicitFieldConstructor = @{ FieldConstructor(bulmaInput.render) }
 
 @template.template("ログイン") {
-    @account._login(login_form)
+    <section class="section">
+        @message match {
+            case Some(m) => {
+                <div class="columns">
+                    <div class="column is-half is-offset-one-quarter">
+                        <div class="notification is-danger">
+                            <button class="delete"></button>
+                            @m
+                        </div>
+                    </div>
+                </div>
+            }
+            case None => {}
+        }
+        <div class="columns">
+            <div class="column is-half is-offset-one-quarter">
+                <div class="box">
+                @form(routes.Account.login()) {
+                    @CSRF.formField
+                    <div class="field">
+                        <p class="control has-icons-left">
+                            @inputText(login_form("email"), '_type -> "email", 'placeholder -> "メールアドレス")
+                            <span class="icon is-small is-left">
+                                <i class="fa fa-envelope"></i>
+                            </span>
+                        </p>
+                    </div>
+                    <div class="field">
+                        <p class="control has-icons-left">
+                            @inputPassword(login_form("password"), '_type -> "password", 'placeholder -> "パスワード")
+                            <span class="icon is-small is-left">
+                                <i class="fa fa-lock"></i>
+                            </span>
+                        </p>
+                    </div>
+                    <button class="button is-primary">ログイン</button>
+                }
+                </div>
+            </div>
+        </div>
+    </section>
 }

@@ -38,6 +38,10 @@
                             <i class="fa fa-sign-in fa-2x" aria-hidden="true"></i>
                             ログイン
                         </a>
+                        <a class="navbar-item" href="@routes.Account.registerIndex()">
+                            <i class="fa fa-user-plus fa-2x" aria-hidden="true"></i>
+                            新規登録
+                        </a>
                     }
                     </div>
                 </div>
@@ -72,5 +76,13 @@
                 });
             }
         });
+
+        const deleteButton = document.getElementsByClassName("delete");
+        for (let i = 0; i < deleteButton.length; i++) {
+            deleteButton[i].addEventListener("click", (e) => {
+                const parent = e.target.parentNode;
+                parent.parentNode.removeChild(parent);
+            });
+        }
     </script>
 </html>
