@@ -4,6 +4,8 @@ POST    /login                      controllers.Account.login
 GET     /register                   controllers.Account.registerIndex
 GET     /logout                     controllers.Account.logout
 
+GET     /admin                      controllers.Admin.index
+
 GET     /api/aggregate/date         controllers.Aggregate.date
 GET     /api/aggregate/month        controllers.Aggregate.month(type_id: Option[String] ?= None)
 

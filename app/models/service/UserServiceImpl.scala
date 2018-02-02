@@ -33,7 +33,8 @@ class UserServiceImpl @Inject()(val dbConfigProvider: DatabaseConfigProvider)(im
     private[this] class Users(tag: Tag) extends Table[User](tag: Tag, "user") {
         def id = column[Int]("id", O.PrimaryKey)
         def email = column[String]("email", O.Unique)
+        def is_admin = column[Boolean]("is_admin")
 
-        def * = (id, email) <> (User.tupled, User.unapply)
+        def * = (id, email, is_admin) <> (User.tupled, User.unapply)
     }
 }
