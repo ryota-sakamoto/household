@@ -2,6 +2,7 @@ GET     /                           controllers.Home.index
 GET     /login                      controllers.Account.loginIndex
 POST    /login                      controllers.Account.login
 GET     /register                   controllers.Account.registerIndex
+POST    /register                   controllers.Account.register
 GET     /logout                     controllers.Account.logout
 
 GET     /admin                      controllers.Admin.index

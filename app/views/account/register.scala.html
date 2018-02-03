@@ -1,0 +1,45 @@
+@import com.mohiva.play.silhouette.api.actions.UserAwareRequest
+@import silhouette.CookieEnv
+@import helper._
+
+@(register_form: Form[Register], message: Option[String])(implicit request: UserAwareRequest[CookieEnv, AnyContent], messages: MessagesProvider)
+@implicitFieldConstructor = @{ FieldConstructor(bulmaInput.render) }
+
+@template.template("新規登録") {
+    <section class="section">
+        <div class="columns">
+            <div class="column is-half is-offset-one-quarter">
+                <div class="box">
+                    @form(routes.Account.register()) {
+                        @CSRF.formField
+                        <div class="field">
+                            <p class="control has-icons-left">
+                                @inputText(register_form("email"), '_type -> "email", 'placeholder -> "メールアドレス")
+                                <span class="icon is-small is-left">
+                                    <i class="fa fa-envelope"></i>
+                                </span>
+                            </p>
+                        </div>
+                        <div class="field">
+                            <p class="control has-icons-left">
+                                @inputPassword(register_form("password"), '_type -> "password", 'placeholder -> "パスワード")
+                                <span class="icon is-small is-left">
+                                    <i class="fa fa-lock"></i>
+                                </span>
+                            </p>
+                        </div>
+                        <div class="field">
+                            <p class="control has-icons-left">
+                                @inputPassword(register_form("confirm_password"), '_type -> "password", 'placeholder -> "パスワード")
+                                <span class="icon is-small is-left">
+                                    <i class="fa fa-lock"></i>
+                                </span>
+                            </p>
+                        </div>
+                        <button class="button is-primary">登録</button>
+                    }
+                </div>
+            </div>
+        </div>
+    </section>
+}

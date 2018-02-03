@@ -1,12 +1,14 @@
 package controllers
 
 import javax.inject._
+
 import com.mohiva.play.silhouette.api.{LoginInfo, Silhouette}
 import play.api.mvc.{InjectedController, MessagesActionBuilder}
+
 import scala.concurrent.{ExecutionContext, Future}
 import play.api.i18n.I18nSupport
 import silhouette.CookieEnv
-import models.Login
+import models.{Login, Register}
 
 @Singleton
 class Account @Inject()(silhouette: Silhouette[CookieEnv], implicit val ec: ExecutionContext, messagesAction: MessagesActionBuilder) extends InjectedController with I18nSupport {
@@ -16,7 +18,7 @@ class Account @Inject()(silhouette: Silhouette[CookieEnv], implicit val ec: Exec
     }
 
     def registerIndex = silhouette.UserAwareAction { implicit request =>
-        Ok(views.html.account.login(Login.login_form, None))
+        Ok(views.html.account.register(Register.form, None))
     }
 
     def login = Action.async { implicit request =>
@@ -38,9 +40,17 @@ class Account @Inject()(silhouette: Silhouette[CookieEnv], implicit val ec: Exec
         }
     }
 
-//    def register = Action.async { implicit request =>
-//
-//    }
+    def register = Action.async { implicit request =>
+        val form = Register.form.bindFromRequest
+        if (form.hasErrors) {
+            // TODO error
+            Future(Redirect(routes.Account.registerIndex()))
+        } else {
+            // TODO register
+            val register = form.get
+            Future(Ok(""))
+        }
+    }
 
     def logout = silhouette.SecuredAction.async { implicit request =>
         val service = silhouette.env.authenticatorService
