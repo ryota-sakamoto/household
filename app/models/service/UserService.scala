@@ -8,5 +8,5 @@ import scala.concurrent.Future
 
 trait UserService extends IdentityService[User] with HasDatabaseConfigProvider[JdbcProfile] {
     def retrieve(email: String, password: String): Future[Option[User]]
-    def save(user: User): Unit
+    def save(user: User): Future[Int]
 }

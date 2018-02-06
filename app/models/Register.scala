@@ -11,6 +11,6 @@ object Register {
             "email" -> email,
             "password" -> nonEmptyText(6),
             "confirm_password" -> nonEmptyText(6)
-        )(Register.apply)(Register.unapply).verifying(d => d.password == d.confirm_password)
+        )(Register.apply)(Register.unapply).verifying("confirm_password invalid", d => d.password == d.confirm_password)
     )
 }

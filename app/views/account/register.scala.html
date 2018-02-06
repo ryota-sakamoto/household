@@ -2,11 +2,26 @@
 @import silhouette.CookieEnv
 @import helper._
 
-@(register_form: Form[Register], message: Option[String])(implicit request: UserAwareRequest[CookieEnv, AnyContent], messages: MessagesProvider)
+@(register_form: Form[Register], message: Option[List[(String, String)]])(implicit request: UserAwareRequest[CookieEnv, AnyContent], messages: MessagesProvider)
 @implicitFieldConstructor = @{ FieldConstructor(bulmaInput.render) }
 
 @template.template("新規登録") {
     <section class="section">
+        @message match {
+            case Some(m) => {
+                @for(error <- m) {
+                    <div class="columns">
+                        <div class="column is-half is-offset-one-quarter">
+                            <div class="notification is-danger">
+                                <button class="delete"></button>
+                                @{s"${error._1}が${error._2}"}
+                            </div>
+                        </div>
+                    </div>
+                }
+            }
+            case None => {}
+        }
         <div class="columns">
             <div class="column is-half is-offset-one-quarter">
                 <div class="box">
@@ -30,7 +45,7 @@
                         </div>
                         <div class="field">
                             <p class="control has-icons-left">
-                                @inputPassword(register_form("confirm_password"), '_type -> "password", 'placeholder -> "パスワード")
+                                @inputPassword(register_form("confirm_password"), '_type -> "password", 'placeholder -> "確認パスワード")
                                 <span class="icon is-small is-left">
                                     <i class="fa fa-lock"></i>
                                 </span>

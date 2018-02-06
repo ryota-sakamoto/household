@@ -2,34 +2,38 @@ package controllers
 
 import javax.inject._
 
-import com.mohiva.play.silhouette.api.{LoginInfo, Silhouette}
+import com.mohiva.play.silhouette.api.Silhouette
+import models.service.UserService
 import play.api.mvc.{InjectedController, MessagesActionBuilder}
 
 import scala.concurrent.{ExecutionContext, Future}
 import play.api.i18n.I18nSupport
 import silhouette.CookieEnv
-import models.{Login, Register}
+import models.{Login, Register, User}
+import util.{ConvertError, Security}
 
 @Singleton
-class Account @Inject()(silhouette: Silhouette[CookieEnv], implicit val ec: ExecutionContext, messagesAction: MessagesActionBuilder) extends InjectedController with I18nSupport {
+class Account @Inject()(silhouette: Silhouette[CookieEnv], implicit val ec: ExecutionContext, messagesAction: MessagesActionBuilder, userService: UserService) extends InjectedController with I18nSupport {
     def loginIndex = silhouette.UserAwareAction { implicit request =>
         val m = request.flash.get("message")
         Ok(views.html.account.login(Login.login_form, m))
     }
 
     def registerIndex = silhouette.UserAwareAction { implicit request =>
-        Ok(views.html.account.register(Register.form, None))
+        val m = request.flash.get("message").map {_.split(",").map { e =>
+            val Array(k, v) = e.trim.split(" ")
+            ConvertError.convert(k, v)
+        }.toList }
+        Ok(views.html.account.register(Register.form, m))
     }
 
     def login = Action.async { implicit request =>
-        val service = silhouette.env.identityService
+//        val service = silhouette.env.identityService
         val authenticator_service = silhouette.env.authenticatorService
 
         val login = Login.login_form.bindFromRequest.get
 
-        val info = LoginInfo("id", login.email) // TODO
-
-        service.retrieve(info).flatMap {
+        userService.retrieve(login.email, Security.sha256Hash(login.password)).flatMap {
             case Some(user) =>
                 for {
                     authenticator <- authenticator_service.create(user.loginInfo)
@@ -40,15 +44,15 @@ class Account @Inject()(silhouette: Silhouette[CookieEnv], implicit val ec: Exec
         }
     }
 
-    def register = Action.async { implicit request =>
+    def register = Action { implicit request =>
         val form = Register.form.bindFromRequest
         if (form.hasErrors) {
-            // TODO error
-            Future(Redirect(routes.Account.registerIndex()))
+            val errors = form.errors.map { e => s"${e.key} ${e.message}" }.mkString(",")
+            Redirect(routes.Account.registerIndex()).flashing("message" -> errors)
         } else {
-            // TODO register
             val register = form.get
-            Future(Ok(""))
+            userService.save(User(register.email, Security.sha256Hash(register.password), true))
+            Redirect(routes.Account.loginIndex())
         }
     }
 

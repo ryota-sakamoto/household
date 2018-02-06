@@ -11,9 +11,9 @@ resolvers += Resolver.jcenterRepo
 libraryDependencies ++= Seq(
 //    jdbc,
     guice,
-    evolutions,
+//    evolutions,
     ehcache,
-    "com.h2database" % "h2" % "1.4.196",
+    "mysql" % "mysql-connector-java" % "5.1.30",
     "com.mohiva" %% "play-silhouette" % "5.0.0",
     "com.mohiva" %% "play-silhouette-password-bcrypt" % "5.0.0",
     "com.mohiva" %% "play-silhouette-crypto-jca" % "5.0.0",
