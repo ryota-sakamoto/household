@@ -15,7 +15,7 @@ import com.mohiva.play.silhouette.impl.util.{DefaultFingerprintGenerator, Secure
 import net.codingwell.scalaguice.ScalaModule
 
 import scala.concurrent.ExecutionContext.Implicits.global
-import models.service.{UserService, UserServiceImpl}
+import models.service.{CategoryService, CategoryServiceImpl, UserService, UserServiceImpl}
 import play.api.Configuration
 import play.api.mvc.CookieHeaderEncoding
 import silhouette.CookieEnv
@@ -25,6 +25,7 @@ class SilhouetteModule extends AbstractModule with ScalaModule {
     def configure(): Unit = {
         bind[Silhouette[CookieEnv]].to[SilhouetteProvider[CookieEnv]]
         bind[UserService].to[UserServiceImpl]
+        bind[CategoryService].to[CategoryServiceImpl]
         bind[FingerprintGenerator].toInstance(new DefaultFingerprintGenerator(false))
         bind[IDGenerator].toInstance(new SecureRandomIDGenerator())
         bind[Clock].toInstance(Clock())

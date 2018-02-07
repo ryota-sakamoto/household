@@ -22,5 +22,6 @@ libraryDependencies ++= Seq(
     "net.codingwell" %% "scala-guice" % "4.1.1",
     "com.iheart" %% "ficus" % "1.4.3",
     "com.typesafe.play" %% "play-slick" % "3.0.1",
-    "com.typesafe.play" %% "play-slick-evolutions" % "3.0.1"
+    "com.typesafe.play" %% "play-slick-evolutions" % "3.0.1",
+    "org.json4s" %% "json4s-native" % "3.6.0-M1"
 )

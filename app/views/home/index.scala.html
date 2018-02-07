@@ -5,8 +5,6 @@
 @template.template("トップページ") {
     <div class="columns">
         <div class="column">
-            <canvas id="chart" width="100" height="50"></canvas>
-
             <div class="dropdown" id="dropdown">
                 <div class="dropdown-trigger">
                     <button class="button" aria-haspopup="true" aria-controls="dropdown-menu" id="dropdown-button">
@@ -15,13 +13,11 @@
                 </div>
                 <div class="dropdown-menu" id="dropdown-menu" role="menu">
                     <div class="dropdown-content">
-                    @for(i <- 0 to 10) {
-                        <a class="dropdown-item">@i</a>
-                    }
                     </div>
                 </div>
             </div>
             <button class="button" id="get-data">表示</button>
+            <canvas id="chart" width="100" height="50"></canvas>
         </div>
     </div>
 
@@ -68,6 +64,22 @@
                 dropdown_value.setAttribute("value", e.target.text)
                 document.getElementById("dropdown").classList.remove("is-active")
             })
+
+            const getCategory = () => {
+                fetch("@routes.Category.list()", {
+                    credentials: 'include'
+                }).then(res => {return res.json()}).then(json => {
+                    const dom = document.querySelector(".dropdown-content")
+                    json.forEach(d => {
+                        const option = document.createElement("a")
+                        option.className = "dropdown-item"
+                        option.text = d.name
+
+                        dom.appendChild(option)
+                    })
+                })
+            }
+            getCategory()
     </script>
 
     <style>
