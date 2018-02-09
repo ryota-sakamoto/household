@@ -1,0 +1,17 @@
+{
+  "name": "household",
+  "version": "0.0.1",
+  "description": "household",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ryota-sakamoto/household.git"
+  },
+  "author": "ryota-sakamoto",
+  "bugs": {
+    "url": "https://github.com/ryota-sakamoto/household/issues"
+  },
+  "dependencies": {
+    "bulma": "^0.6.2",
+    "chart.js": "^2.7.1"
+  }
+}
