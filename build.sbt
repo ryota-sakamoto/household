@@ -3,6 +3,9 @@ name := """household"""
 version := "1.0"
 
 lazy val root = (project in file(".")).enablePlugins(PlayScala)
+    .settings(
+        resourceDirectory in Assets := baseDirectory.value / "node_modules"
+    )
 
 scalaVersion := "2.12.4"
 
