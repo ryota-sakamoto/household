@@ -13,6 +13,20 @@ import org.json4s.native.Serialization.write
 
 @Singleton
 class Category @Inject()(silhouette: Silhouette[CookieEnv], categoryService: CategoryService) extends InjectedController {
+    def index = silhouette.UserAwareAction { implicit request =>
+        request.identity match {
+            case Some(_) => Ok(views.html.category.index())
+            case None => Redirect(routes.Account.loginIndex()).flashing("message" -> "Login is needed")
+        }
+    }
+
+    def edit(id: Int) = silhouette.UserAwareAction { implicit request =>
+        request.identity match {
+            case Some(_) => Ok(views.html.category.index())
+            case None => Redirect(routes.Account.loginIndex()).flashing("message" -> "Login is needed")
+        }
+    }
+
     def list = silhouette.SecuredAction.async { implicit request =>
         implicit val formats = Serialization.formats(NoTypeHints)
 

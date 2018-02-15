@@ -11,6 +11,7 @@
         <link rel="stylesheet" href="@routes.Assets.at("bulma/css/bulma.css")">
         <link rel="stylesheet" href="@routes.Assets.at("font-awesome/css/font-awesome.min.css")">
         <script type="text/javascript" src="@routes.Assets.at("chart.js/dist/Chart.bundle.js")"></script>
+        <script type="text/javascript" src="@routes.Assets.at("vue/dist/vue.js")"></script>
     </head>
     <body>
         <nav class="navbar" role="navigation" aria-label="main navigation">
@@ -29,6 +30,10 @@
                 <div class="navbar-menu">
                     <div class="navbar-end">
                     @if(request.identity.isDefined){
+                        <a class="navbar-item" href="@routes.Category.index()">
+                            <i class="fa fa-list fa-2x" aria-hidden="true"></i>
+                            カテゴリ管理
+                        </a>
                         <a class="navbar-item" href="@routes.Account.logout()">
                             <i class="fa fa-sign-out fa-2x" aria-hidden="true"></i>
                             ログアウト

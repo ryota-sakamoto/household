@@ -1,3 +1,3 @@
 package models
 
-case class Category(name: String)
+case class Category(id: Int, name: String, memo: String)

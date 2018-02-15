@@ -12,9 +12,9 @@ class CategoryServiceImpl @Inject()(val dbConfigProvider: DatabaseConfigProvider
     // TODO
     override def list: Future[List[Category]] = {
         Future(List[Category](
-            Category("name1"),
-            Category("name2"),
-            Category("name3")
+            Category(1, "name1", "memo1"),
+            Category(2, "name2", "memo2"),
+            Category(3, "name3", "memo3")
         ))
     }
 }

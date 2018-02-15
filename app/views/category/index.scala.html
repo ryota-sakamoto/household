@@ -1,0 +1,52 @@
+@import com.mohiva.play.silhouette.api.actions.UserAwareRequest
+@import silhouette.CookieEnv
+
+@()(implicit request: UserAwareRequest[CookieEnv, AnyContent])
+
+@template.template("カテゴリ管理") {
+    <div class="columns">
+        <div class="column is-one-quarter">
+            <nav class="panel">
+                <p class="panel-heading">
+                    カテゴリ一覧
+                </p>
+                <div class="panel-block">
+                    <p class="control has-icons-left">
+                        <input class="input is-small" type="text" placeholder="search">
+                        <span class="icon is-small is-left">
+                            <i class="fa fa-search"></i>
+                        </span>
+                    </p>
+                </div>
+
+                <div id="app">
+                    <category-list-item v-for="category in data" v-bind:category="category"></category-list-item>
+                </div>
+            </nav>
+        </div>
+    </div>
+    <script>
+        Vue.component("category-list-item", {
+            props: ["category"],
+            template: `
+                <a class="panel-block" v-bind:href="category.id">
+                    <span class="panel-icon">
+                        <i class="fa fa-book"></i>
+                    </span>
+                    {{ category.name }}
+                </a>
+            `
+        })
+
+        fetch("@routes.Category.list()", {
+            credentials: 'include'
+        }).then((res) => {return res.json()}).then((json) => {
+            new Vue({
+                el: "#app",
+                data: {
+                    data: json
+                }
+            })
+        })
+    </script>
+}
