@@ -6,36 +6,36 @@
 @template.template("カテゴリ管理") {
     <div class="columns">
         <div class="column is-one-quarter">
-            <nav class="panel">
-                <p class="panel-heading">
-                    カテゴリ一覧
-                </p>
-                <div class="panel-block">
-                    <p class="control has-icons-left">
-                        <input class="input is-small" type="text" placeholder="search">
-                        <span class="icon is-small is-left">
-                            <i class="fa fa-search"></i>
-                        </span>
+            <div id="app">
+                <aside class="menu">
+                    <p class="menu-label">
+                        カテゴリ
                     </p>
-                </div>
-
-                <div id="app">
-                    <category-list-item v-for="category in data" v-bind:category="category"></category-list-item>
-                </div>
-            </nav>
+                    <menu-list v-bind:data="data"></menu-list>
+                </aside>
+            </div>
         </div>
     </div>
     <script>
-        Vue.component("category-list-item", {
+        Vue.component("menu-list", {
+            props: ["data"],
+            template: `
+                <ul class="menu-list">
+                    <menu-list-item v-for="category in data" v-bind:category="category"></menu-list-item>
+                </ul>
+            `
+        })
+
+        Vue.component("menu-list-item", {
             props: ["category"],
             template: `
-                <a class="panel-block" v-bind:href="category.id">
-                    <span class="panel-icon">
-                        <i class="fa fa-book"></i>
-                    </span>
-                    {{ category.name }}
-                </a>
-            `
+                <li><a v-on:click="edit">{{ category.name }}</a></li>
+            `,
+            methods: {
+                edit: function() {
+                    location.href = `@routes.Category.index()/${this.category.id}/edit`
+                }
+            }
         })
 
         fetch("@routes.Category.list()", {
