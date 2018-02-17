@@ -13,10 +13,26 @@
                     </p>
                     <menu-list v-bind:data="data"></menu-list>
                 </aside>
+                <router-view></router-view>
             </div>
         </div>
     </div>
     <script>
+        const edit = {
+            template: `<div>{{ $route.params.id }}</div>`
+        }
+
+        const router = new VueRouter({
+            mode: "history",
+            routes: [
+                {
+                    name: "edit",
+                    path: `@routes.Category.index()/:id/edit`,
+                    component: edit
+                }
+            ]
+        })
+
         Vue.component("menu-list", {
             props: ["data"],
             template: `
@@ -29,23 +45,21 @@
         Vue.component("menu-list-item", {
             props: ["category"],
             template: `
-                <li><a v-on:click="edit">{{ category.name }}</a></li>
+                <li><router-link :to="{name: 'edit', params: { id: category.id}}">{{ category.name }}</router-link></li>
             `,
             methods: {
-                edit: function() {
-                    location.href = `@routes.Category.index()/${this.category.id}/edit`
-                }
             }
         })
 
         fetch("@routes.Category.list()", {
             credentials: 'include'
         }).then((res) => {return res.json()}).then((json) => {
-            new Vue({
+            const app = new Vue({
                 el: "#app",
                 data: {
                     data: json
-                }
+                },
+                router
             })
         })
     </script>
