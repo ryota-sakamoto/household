@@ -4,33 +4,65 @@
 @()(implicit request: UserAwareRequest[CookieEnv, AnyContent])
 
 @template.template("カテゴリ管理") {
-    <div class="columns">
+    <div id="app" class="columns">
         <div class="column is-one-quarter">
-            <div id="app">
-                <aside class="menu">
-                    <p class="menu-label">
-                        カテゴリ
-                    </p>
-                    <menu-list v-bind:data="data"></menu-list>
-                </aside>
-                <router-view></router-view>
-            </div>
+            <aside class="menu">
+                <p class="menu-label">
+                    カテゴリ
+                </p>
+                <menu-list v-bind:data="data"></menu-list>
+            </aside>
+        </div>
+        <div class="column">
+            <router-view></router-view>
         </div>
     </div>
     <script>
-        const edit = {
-            template: `<div>{{ $route.params.id }}</div>`
+        const request = (that) => {
+            fetch(`/api@routes.Category.index()/${that.id}`, {
+                credentials: 'include'
+            }).then((res) => {return res.json()}).then((json) => {
+                that.id = json.id
+                that.name = json.name
+                that.memo = json.memo
+            })
         }
+
+        // TODO
+        const edit = {
+            template: `
+                <div>{{ name }}</div>
+            `,
+            data: function () {
+                return {
+                    id: 0,
+                    name: "",
+                    memo: "",
+                }
+            },
+            created: function () {
+                this.id = this.$route.params.id
+                request(this)
+            },
+            watch: {
+                "$route" (to, from) {
+                    this.id = to.params.id
+                    request(this)
+                }
+            }
+        }
+
+        const routes = [
+            {
+                name: "edit",
+                path: `@routes.Category.index()/:id/edit`,
+                component: edit
+            }
+        ]
 
         const router = new VueRouter({
             mode: "history",
-            routes: [
-                {
-                    name: "edit",
-                    path: `@routes.Category.index()/:id/edit`,
-                    component: edit
-                }
-            ]
+            routes
         })
 
         Vue.component("menu-list", {
@@ -54,7 +86,7 @@
         fetch("@routes.Category.list()", {
             credentials: 'include'
         }).then((res) => {return res.json()}).then((json) => {
-            const app = new Vue({
+            new Vue({
                 el: "#app",
                 data: {
                     data: json

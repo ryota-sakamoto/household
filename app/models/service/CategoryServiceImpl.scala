@@ -10,6 +10,11 @@ class CategoryServiceImpl @Inject()(val dbConfigProvider: DatabaseConfigProvider
     override def register: Future[Int] = ???
 
     // TODO
+    override def find(id: Int): Future[Option[Category]] = {
+        Future(Some(Category(id, s"name$id", s"memo$id")))
+    }
+
+    // TODO
     override def list: Future[List[Category]] = {
         Future(List[Category](
             Category(1, "name1", "memo1"),

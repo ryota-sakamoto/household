@@ -11,6 +11,8 @@ GET     /category                   controllers.Category.index
 GET     /category/:id/edit          controllers.Category.edit(id: Int)
 
 GET     /api/category/list          controllers.Category.list
+GET     /api/category/:id           controllers.Category.show(id: Int)
+POST    /api/category/:id           controllers.Category.update(id: Int)
 GET     /api/aggregate/date         controllers.Aggregate.date
 GET     /api/aggregate/month        controllers.Aggregate.month(type_id: Option[String] ?= None)
 
