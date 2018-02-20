@@ -8,6 +8,6 @@ import scala.concurrent.Future
 
 trait CategoryService extends HasDatabaseConfigProvider[JdbcProfile] {
     def register: Future[Int]
-    def find(id: Int): Future[Option[Category]]
-    def list: Future[List[Category]]
+    def find(user_id: Int, category_id: Int): Future[Option[Category]]
+    def list(user_id: Int): Future[Seq[Category]]
 }
