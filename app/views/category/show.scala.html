@@ -4,17 +4,11 @@
 @(category: models.Category)(implicit request: UserAwareRequest[CookieEnv, AnyContent])
 
 @template.template("カテゴリ詳細") {
-    <div class="columns">
-        <div class="column">
-            <nav class="breadcrumb" aria-label="breadcrumbs">
-                <ul>
-                    <li><a href="@routes.Home.index()">Home</a></li>
-                    <li><a href="@routes.Category.index()">Category List</a></li>
-                    <li class="is-active"><a href="#" aria-current="page">@category.name</a></li>
-                </ul>
-            </nav>
-        </div>
-    </div>
+    @template.breadcrumb(List(
+        "Home" -> routes.Home.index().url,
+        "Category List" -> routes.Category.index().url,
+        category.name -> routes.Category.show(category.id).url
+    ))
     <div class="columns">
         <div class="column">
             <div class="content">

@@ -1,0 +1,17 @@
+@(list: List[(String, String)])
+
+<div class="columns">
+    <div class="column">
+        <nav class="breadcrumb" aria-label="breadcrumbs">
+            <ul>
+                @for(n <- list.indices) {
+                    @if(n != list.length - 1) {
+                        <li><a href="@list(n)._2">@list(n)._1</a></li>
+                    } else {
+                        <li class="is-active"><a href="#" aria-current="page">@list(n)._1</a></li>
+                    }
+                }
+            </ul>
+        </nav>
+    </div>
+</div>
