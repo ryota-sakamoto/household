@@ -22,9 +22,8 @@ class Category @Inject()(silhouette: Silhouette[CookieEnv], categoryService: Cat
 
     def index = silhouette.UserAwareAction.async { implicit request =>
         request.identity match {
-            case Some(user) =>
-                // TODO
-                categoryService.list(1).flatMap { list =>
+            case Some(u) =>
+                categoryService.list(u.id).flatMap { list =>
                     Future(Ok(views.html.category.index(list)))
                 }
             case None => LoginIsNeeded
@@ -40,9 +39,8 @@ class Category @Inject()(silhouette: Silhouette[CookieEnv], categoryService: Cat
 
     def show(id: Int) = silhouette.UserAwareAction.async { implicit request =>
         request.identity match {
-            case Some(_) =>
-                // TODO
-                categoryService.find(1, id).flatMap {
+            case Some(u) =>
+                categoryService.find(u.id, id).flatMap {
                     case Some(category) =>
                         Future(Ok(views.html.category.show(category)))
                     case None => Future(NotFound(""))
@@ -55,9 +53,8 @@ class Category @Inject()(silhouette: Silhouette[CookieEnv], categoryService: Cat
         Ok("")
     }
 
-    // TODO
     def list = silhouette.SecuredAction.async { implicit request =>
-        categoryService.list(1).map(l => write[Seq[models.Category]](l)).map { json =>
+        categoryService.list(request.identity.id).map(l => write[Seq[models.Category]](l)).map { json =>
             Ok(json).as(ContentTypes.JSON)
         }
     }
