@@ -21,14 +21,19 @@ class Category @Inject()(silhouette: Silhouette[CookieEnv], categoryService: Cat
     private val LoginIsNeeded = Future(Redirect(routes.Account.loginIndex()).flashing("message" -> "Login is needed"))
 
     def index = silhouette.UserAwareAction.async { implicit request =>
+        val message = request.flash.get("message")
         request.identity match {
             case Some(u) =>
                 categoryService.list(u.id).flatMap { list =>
-                    Future(Ok(views.html.category.index(list)))
+                    Future(Ok(views.html.category.index(list, message)))
                 }
             case None => LoginIsNeeded
         }
     }
+
+    def registerIndex = TODO
+
+    def register = TODO
 
     def edit(id: Int) = silhouette.UserAwareAction.async { implicit request =>
         request.identity match {
@@ -59,7 +64,7 @@ class Category @Inject()(silhouette: Silhouette[CookieEnv], categoryService: Cat
         } yield {
             n match {
                 case 0 => BadRequest("")
-                case 1 => Redirect(routes.Category.index())
+                case 1 => Redirect(routes.Category.index()).flashing("message" -> s"$id was removed")
             }
         }
     }

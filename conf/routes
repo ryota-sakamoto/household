@@ -8,6 +8,8 @@ GET     /logout                     controllers.Account.logout
 GET     /admin                      controllers.Admin.index
 
 GET     /category                   controllers.Category.index
+GET     /category/new               controllers.Category.registerIndex
+POST    /category/new               controllers.Category.register
 GET     /category/:id               controllers.Category.show(id: Int)
 GET     /category/:id/edit          controllers.Category.edit(id: Int)
 POST    /category/:id               controllers.Category.update(id: Int)

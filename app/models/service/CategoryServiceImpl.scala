@@ -10,7 +10,7 @@ class CategoryServiceImpl @Inject()(val dbConfigProvider: DatabaseConfigProvider
     import profile.api._
     private val categories = TableQuery[Categories]
 
-    override def register(c: Category): Future[Int] = {
+    override def register(user_id: Int, c: Category): Future[Int] = {
         db.run(categories += c)
     }
 

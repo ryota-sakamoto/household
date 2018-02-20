@@ -9,14 +9,7 @@
     <section class="section">
         @message match {
             case Some(m) => {
-                <div class="columns">
-                    <div class="column is-half is-offset-one-quarter">
-                        <div class="notification is-danger">
-                            <button class="delete"></button>
-                            @m
-                        </div>
-                    </div>
-                </div>
+                @template.notification(m)
             }
             case None => {}
         }

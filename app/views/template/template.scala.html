@@ -82,13 +82,5 @@
                 });
             }
         });
-
-        const deleteButton = document.getElementsByClassName("delete");
-        for (let i = 0; i < deleteButton.length; i++) {
-            deleteButton[i].addEventListener("click", (e) => {
-                const parent = e.target.parentNode;
-                parent.parentNode.removeChild(parent);
-            });
-        }
     </script>
 </html>
