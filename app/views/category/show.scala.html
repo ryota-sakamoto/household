@@ -1,5 +1,6 @@
 @import com.mohiva.play.silhouette.api.actions.UserAwareRequest
 @import silhouette.CookieEnv
+@import helper._
 
 @(category: models.Category)(implicit request: UserAwareRequest[CookieEnv, AnyContent])
 
@@ -16,36 +17,10 @@
                 <p>@category.memo</p>
 
                 <h2></h2>
-                <table>
-                    <thead>
-                        <tr>
-                            <th style="width: 20%;">Name</th>
-                            <th>Value</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td>Three</td>
-                            <td>Four</td>
-                        </tr>
-                        <tr>
-                            <td>Five</td>
-                            <td>Six</td>
-                        </tr>
-                        <tr>
-                            <td>Seven</td>
-                            <td>Eight</td>
-                        </tr>
-                        <tr>
-                            <td>Nine</td>
-                            <td>Ten</td>
-                        </tr>
-                        <tr>
-                            <td>Eleven</td>
-                            <td>Twelve</td>
-                        </tr>
-                    </tbody>
-                </table>
+                @form(routes.Category.remove(category.id)) {
+                    @CSRF.formField
+                    <button type="submit" class="button is-danger">削除</button>
+                }
             </div>
         </div>
     </div>

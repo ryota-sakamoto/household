@@ -53,6 +53,17 @@ class Category @Inject()(silhouette: Silhouette[CookieEnv], categoryService: Cat
         Ok("")
     }
 
+    def remove(id: Int) = silhouette.SecuredAction.async { implicit request =>
+        for {
+            n <- categoryService.remove(request.identity.id, id)
+        } yield {
+            n match {
+                case 0 => BadRequest("")
+                case 1 => Redirect(routes.Category.index())
+            }
+        }
+    }
+
     def list = silhouette.SecuredAction.async { implicit request =>
         categoryService.list(request.identity.id).map(l => write[Seq[models.Category]](l)).map { json =>
             Ok(json).as(ContentTypes.JSON)
