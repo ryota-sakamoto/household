@@ -18,26 +18,34 @@ import scala.concurrent.Future
 @Singleton
 class Category @Inject()(silhouette: Silhouette[CookieEnv], categoryService: CategoryService) extends InjectedController {
     implicit val formats = Serialization.formats(NoTypeHints)
+    private val LoginIsNeeded = Future(Redirect(routes.Account.loginIndex()).flashing("message" -> "Login is needed"))
 
-    def index = silhouette.UserAwareAction { implicit request =>
+    def index = silhouette.UserAwareAction.async { implicit request =>
         request.identity match {
-            case Some(_) => Ok(views.html.category.index())
-            case None => Redirect(routes.Account.loginIndex()).flashing("message" -> "Login is needed")
+            case Some(_) =>
+                categoryService.list.flatMap { list =>
+                    Future(Ok(views.html.category.index(list)))
+                }
+            case None => LoginIsNeeded
         }
     }
 
-    def edit(id: Int) = silhouette.UserAwareAction { implicit request =>
+    def edit(id: Int) = silhouette.UserAwareAction.async { implicit request =>
         request.identity match {
-            case Some(_) => Ok(views.html.category.index())
-            case None => Redirect(routes.Account.loginIndex()).flashing("message" -> "Login is needed")
+            case Some(_) => Future(Ok(""))
+            case None => LoginIsNeeded
         }
     }
 
-    def show(id: Int) = silhouette.SecuredAction.async { implicit request =>
-        categoryService.find(id).flatMap {
-            case Some(category) =>
-                Future(Ok(write[models.Category](category)).as(ContentTypes.JSON))
-            case None => Future(NotFound(""))
+    def show(id: Int) = silhouette.UserAwareAction.async { implicit request =>
+        request.identity match {
+            case Some(_) =>
+                categoryService.find(id).flatMap {
+                    case Some(category) =>
+                        Future(Ok(views.html.category.show(category)))
+                    case None => Future(NotFound(""))
+                }
+            case None => LoginIsNeeded
         }
     }
 

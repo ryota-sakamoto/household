@@ -1,98 +1,23 @@
 @import com.mohiva.play.silhouette.api.actions.UserAwareRequest
 @import silhouette.CookieEnv
 
-@()(implicit request: UserAwareRequest[CookieEnv, AnyContent])
+@(list: List[models.Category])(implicit request: UserAwareRequest[CookieEnv, AnyContent])
 
 @template.template("カテゴリ管理") {
-    <div id="app" class="columns">
+    <div class="columns">
         <div class="column is-one-quarter">
             <aside class="menu">
                 <p class="menu-label">
                     カテゴリ
                 </p>
-                <menu-list v-bind:data="data"></menu-list>
+                <ul class="menu-list">
+                    @for(category <- list) {
+                        <li><a href="@routes.Category.show(category.id)">@category.name</a></li>
+                    }
+                </ul>
             </aside>
         </div>
         <div class="column">
-            <router-view></router-view>
         </div>
     </div>
-    <script>
-        const request = (that) => {
-            fetch(`/api@routes.Category.index()/${that.id}`, {
-                credentials: 'include'
-            }).then((res) => {return res.json()}).then((json) => {
-                that.id = json.id
-                that.name = json.name
-                that.memo = json.memo
-            })
-        }
-
-        // TODO
-        const edit = {
-            template: `
-                <div>{{ name }}</div>
-            `,
-            data: function () {
-                return {
-                    id: 0,
-                    name: "",
-                    memo: "",
-                }
-            },
-            created: function () {
-                this.id = this.$route.params.id
-                request(this)
-            },
-            watch: {
-                "$route" (to, from) {
-                    this.id = to.params.id
-                    request(this)
-                }
-            }
-        }
-
-        const routes = [
-            {
-                name: "edit",
-                path: `@routes.Category.index()/:id/edit`,
-                component: edit
-            }
-        ]
-
-        const router = new VueRouter({
-            mode: "history",
-            routes
-        })
-
-        Vue.component("menu-list", {
-            props: ["data"],
-            template: `
-                <ul class="menu-list">
-                    <menu-list-item v-for="category in data" v-bind:category="category"></menu-list-item>
-                </ul>
-            `
-        })
-
-        Vue.component("menu-list-item", {
-            props: ["category"],
-            template: `
-                <li><router-link :to="{name: 'edit', params: { id: category.id}}">{{ category.name }}</router-link></li>
-            `,
-            methods: {
-            }
-        })
-
-        fetch("@routes.Category.list()", {
-            credentials: 'include'
-        }).then((res) => {return res.json()}).then((json) => {
-            new Vue({
-                el: "#app",
-                data: {
-                    data: json
-                },
-                router
-            })
-        })
-    </script>
 }

@@ -1,0 +1,58 @@
+@import com.mohiva.play.silhouette.api.actions.UserAwareRequest
+@import silhouette.CookieEnv
+
+@(category: models.Category)(implicit request: UserAwareRequest[CookieEnv, AnyContent])
+
+@template.template("カテゴリ詳細") {
+    <div class="columns">
+        <div class="column">
+            <nav class="breadcrumb" aria-label="breadcrumbs">
+                <ul>
+                    <li><a href="@routes.Home.index()">Home</a></li>
+                    <li><a href="@routes.Category.index()">Category List</a></li>
+                    <li class="is-active"><a href="#" aria-current="page">@category.name</a></li>
+                </ul>
+            </nav>
+        </div>
+    </div>
+    <div class="columns">
+        <div class="column">
+            <div class="content">
+                <h2>memo</h2>
+                <p>@category.memo</p>
+
+                <h2></h2>
+                <table>
+                    <thead>
+                        <tr>
+                            <th style="width: 20%;">Name</th>
+                            <th>Value</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Three</td>
+                            <td>Four</td>
+                        </tr>
+                        <tr>
+                            <td>Five</td>
+                            <td>Six</td>
+                        </tr>
+                        <tr>
+                            <td>Seven</td>
+                            <td>Eight</td>
+                        </tr>
+                        <tr>
+                            <td>Nine</td>
+                            <td>Ten</td>
+                        </tr>
+                        <tr>
+                            <td>Eleven</td>
+                            <td>Twelve</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+}
