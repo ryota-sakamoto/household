@@ -1,0 +1,40 @@
+@import com.mohiva.play.silhouette.api.actions.UserAwareRequest
+@import silhouette.CookieEnv
+@import helper._
+
+@(category_form: Form[CategoryRegister])(implicit request: UserAwareRequest[CookieEnv, AnyContent], messages: MessagesProvider)
+@implicitFieldConstructor = @{ FieldConstructor(bulmaInput.render) }
+
+@template.template("カテゴリ登録") {
+    @template.breadcrumb(List(
+        "Home" -> routes.Home.index().url,
+        "Category List" -> routes.Category.index().url,
+        "New" -> routes.Category.registerIndex().url,
+    ))
+    <div class="columns">
+        <div class="column is-half is-offset-one-quarter">
+            <div class="box">
+                @form(routes.Category.register()) {
+                    @CSRF.formField
+                    <div class="field">
+                        <p class="control has-icons-left">
+                            @inputText(category_form("name"), '_type -> "text", 'placeholder -> "名前")
+                            <span class="icon is-small is-left">
+                                <i class="fa fa-thumb-tack"></i>
+                            </span>
+                        </p>
+                    </div>
+                    <div class="field">
+                        <p class="control has-icons-left">
+                            @inputText(category_form("memo"), '_type -> "text", 'placeholder -> "メモ")
+                            <span class="icon is-small is-left">
+                                <i class="fa fa-paperclip"></i>
+                            </span>
+                        </p>
+                    </div>
+                    <button class="button is-link">Submit</button>
+                }
+            </div>
+        </div>
+    </div>
+}

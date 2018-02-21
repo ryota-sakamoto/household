@@ -15,19 +15,20 @@
         case None => {}
     }
     <div class="columns">
-        <div class="column is-one-quarter">
-            <aside class="menu">
-                <p class="menu-label">
-                    カテゴリ
-                </p>
-                <ul class="menu-list">
+        <div class="column is-half is-offset-one-quarter">
+            <div class="box">
+                <aside class="menu">
+                    <p class="menu-label" style="width: 50%;float: left;">
+                        カテゴリ
+                    </p>
+                    <a class="button is-primary is-small" style="float: right;" href="@routes.Category.registerIndex()">登録</a>
+                    <ul class="menu-list" style="clear: both;">
                     @for(category <- list) {
                         <li><a href="@routes.Category.show(category.id)">@category.name</a></li>
                     }
-                </ul>
-            </aside>
-        </div>
-        <div class="column">
+                    </ul>
+                </aside>
+            </div>
         </div>
     </div>
 }

@@ -10,7 +10,7 @@ class CategoryServiceImpl @Inject()(val dbConfigProvider: DatabaseConfigProvider
     import profile.api._
     private val categories = TableQuery[Categories]
 
-    override def register(user_id: Int, c: Category): Future[Int] = {
+    override def register(c: Category): Future[Int] = {
         db.run(categories += c)
     }
 
@@ -40,6 +40,6 @@ class CategoryServiceImpl @Inject()(val dbConfigProvider: DatabaseConfigProvider
         def updated_at = column[Date]("updated_at")
         def deleted_at = column[Option[Date]]("deleted_at")
 
-        def * = (category_id, name, memo, created_at, updated_at, deleted_at) <> (Category.tupled, Category.unapply)
+        def * = (category_id, user_id, name, memo, created_at, updated_at, deleted_at) <> (Category.tupled, Category.unapply)
     }
 }

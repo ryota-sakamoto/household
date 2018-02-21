@@ -1,8 +1,10 @@
 package controllers
 
+import java.sql.Date
 import javax.inject._
 
 import com.mohiva.play.silhouette.api.Silhouette
+import models.CategoryRegister
 import models.service.CategoryService
 import play.api.mvc.InjectedController
 import silhouette.CookieEnv
@@ -12,11 +14,12 @@ import scala.concurrent.ExecutionContext.Implicits.global
 import org.json4s.NoTypeHints
 import org.json4s.native.Serialization
 import org.json4s.native.Serialization.write
+import play.api.i18n.I18nSupport
 
 import scala.concurrent.Future
 
 @Singleton
-class Category @Inject()(silhouette: Silhouette[CookieEnv], categoryService: CategoryService) extends InjectedController {
+class Category @Inject()(silhouette: Silhouette[CookieEnv], categoryService: CategoryService) extends InjectedController with I18nSupport {
     implicit val formats = Serialization.formats(NoTypeHints)
     private val LoginIsNeeded = Future(Redirect(routes.Account.loginIndex()).flashing("message" -> "Login is needed"))
 
@@ -31,9 +34,29 @@ class Category @Inject()(silhouette: Silhouette[CookieEnv], categoryService: Cat
         }
     }
 
-    def registerIndex = TODO
+    def registerIndex = silhouette.UserAwareAction.async { implicit request =>
+        request.identity match {
+            case Some(_) => Future(Ok(views.html.category.register(CategoryRegister.form)))
+            case None => LoginIsNeeded
+        }
+    }
 
-    def register = TODO
+    def register = silhouette.SecuredAction.async { implicit request =>
+        val form = CategoryRegister.form.bindFromRequest
+        if (form.hasErrors) {
+            Future(Ok(""))
+        } else {
+            val c = form.get
+            val date = new Date(System.currentTimeMillis)
+            categoryService.list(request.identity.id).flatMap { list =>
+                val category = models.Category(list.last.id + 1, request.identity.id, c.name, c.memo, date, date, None)
+                categoryService.register(category).flatMap {
+                    case 0 => Future(BadRequest(""))
+                    case 1 => Future(Redirect(routes.Category.index()).flashing("message" -> "register success"))
+                }
+            }
+        }
+    }
 
     def edit(id: Int) = silhouette.UserAwareAction.async { implicit request =>
         request.identity match {

@@ -12,15 +12,17 @@
     ))
     <div class="columns">
         <div class="column">
-            <div class="content">
-                <h2>memo</h2>
-                <p>@category.memo</p>
+            <div class="box">
+                <div class="content">
+                    <h2>memo</h2>
+                    <p>@category.memo</p>
 
-                <h2></h2>
-                @form(routes.Category.remove(category.id)) {
-                    @CSRF.formField
-                    <button type="submit" class="button is-danger">削除</button>
-                }
+                    <h2></h2>
+                    @form(routes.Category.remove(category.id)) {
+                        @CSRF.formField
+                        <button type="submit" class="button is-danger">削除</button>
+                    }
+                </div>
             </div>
         </div>
     </div>
