@@ -9,83 +9,127 @@
     <div class="columns">
        @template.sidemenu()
         <div class="column">
-            <div class="box">
-                <div class="dropdown" id="dropdown">
-                    <div class="dropdown-trigger">
-                        <button class="button" aria-haspopup="true" aria-controls="dropdown-menu" id="dropdown-button">
-                            <span id="dropdown-value" value="0">選択してください</span>
-                        </button>
-                    </div>
-                    <div class="dropdown-menu" id="dropdown-menu" role="menu">
-                        <div class="dropdown-content">
+            <div class="columns">
+                <div class="column">
+                    <div class="box">
+                        <div class="columns">
+                            <div class="column">
+                                <input class="input" id="calendar" type="text">
+                            </div>
+                        </div>
+                        <div class="columns">
+                            <div class="column">
+                                <canvas id="daily_chart" width="100" height="50"></canvas>
+                            </div>
                         </div>
                     </div>
                 </div>
-                <button class="button" id="get-data">表示</button>
-                <canvas id="chart" width="100" height="50"></canvas>
+            </div>
+            <div class="columns">
+                <div class="column">
+                    <div class="box">
+                        <div class="dropdown" id="dropdown">
+                            <div class="dropdown-trigger">
+                                <button class="button" aria-haspopup="true" aria-controls="dropdown-menu" id="dropdown-button">
+                                    <span id="dropdown-value" value="0">選択してください</span>
+                                </button>
+                            </div>
+                            <div class="dropdown-menu" id="dropdown-menu" role="menu">
+                                <div class="dropdown-content">
+                                </div>
+                            </div>
+                        </div>
+                        <button class="button" id="get-data">表示</button>
+                        <canvas id="chart" width="100" height="50"></canvas>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
 
     <script>
-            const ctx = document.getElementById("chart").getContext("2d")
-            const dom = document.getElementById("get-data")
-
-            dom.addEventListener("click", () => {
-                fetch("@routes.Aggregate.month()", {
-                    credentials: 'include'
-                }).then((res) => {return res.json()}).then((json) => {
-                    new Chart(ctx, {
-                        type: "line",
-                        data: {
-                            labels: json.data.map((d) => {return d.month}),
-                            datasets: [
-                                {
-                                    label: json.title,
-                                    data: json.data.map((d) => {return d.value}),
-                                    fill: false
-                                }
-                            ]
-                        }
-                    })
-                })
-            })
-
-            dom.click()
-
-            const dropdown_button = document.getElementById("dropdown-button")
-            dropdown_button.addEventListener("click", () => {
-                const dropdown = document.getElementById("dropdown")
-                if (dropdown.classList.contains("is-active")) {
-                    dropdown.classList.remove("is-active")
-                } else {
-                    dropdown.classList.add("is-active")
-                }
-            })
-
-            const dropdown_content = document.getElementsByClassName("dropdown-content")[0]
-            dropdown_content.addEventListener("click", (e) => {
-                const dropdown_value = document.getElementById("dropdown-value")
-                dropdown_value.textContent = e.target.text
-                dropdown_value.setAttribute("value", e.target.text)
-                document.getElementById("dropdown").classList.remove("is-active")
-            })
-
-            const getCategory = () => {
-                fetch("@routes.Category.list()", {
-                    credentials: 'include'
-                }).then(res => {return res.json()}).then(json => {
-                    const dom = document.querySelector(".dropdown-content")
-                    json.forEach(d => {
-                        const option = document.createElement("a")
-                        option.className = "dropdown-item"
-                        option.text = d.name
-
-                        dom.appendChild(option)
-                    })
-                })
+        const daily_ctx = document.getElementById("daily_chart").getContext("2d")
+        new Chart(daily_ctx, {
+            type: "pie",
+            data: {
+                datasets: [{
+                    data: [1, 2, 4]
+                }],
+                labels: ["1", "2", "4"]
             }
-            getCategory()
+        })
+
+        flatpickr("#calendar", {
+            maxDate: "today",
+            defaultDate: ["today"]
+        })
+
+        const date = document.getElementById("calendar").value
+
+        fetch(`@routes.Aggregate.date()?date=${date}`, {
+            credentials: 'include'
+        }).then((res) => {return res.json()}).then((json) => {
+            console.log(json)
+        })
+
+        const ctx = document.getElementById("chart").getContext("2d")
+        const dom = document.getElementById("get-data")
+
+        dom.addEventListener("click", () => {
+            fetch("@routes.Aggregate.month()", {
+                credentials: 'include'
+            }).then((res) => {return res.json()}).then((json) => {
+                new Chart(ctx, {
+                    type: "line",
+                    data: {
+                        labels: json.data.map((d) => {return d.month}),
+                        datasets: [
+                            {
+                                label: json.title,
+                                data: json.data.map((d) => {return d.value}),
+                                fill: false
+                            }
+                        ]
+                    }
+                })
+            })
+        })
+
+        dom.click()
+
+        const dropdown_button = document.getElementById("dropdown-button")
+        dropdown_button.addEventListener("click", () => {
+            const dropdown = document.getElementById("dropdown")
+            if (dropdown.classList.contains("is-active")) {
+                dropdown.classList.remove("is-active")
+            } else {
+                dropdown.classList.add("is-active")
+            }
+        })
+
+        const dropdown_content = document.getElementsByClassName("dropdown-content")[0]
+        dropdown_content.addEventListener("click", (e) => {
+            const dropdown_value = document.getElementById("dropdown-value")
+            dropdown_value.textContent = e.target.text
+            dropdown_value.setAttribute("value", e.target.text)
+            document.getElementById("dropdown").classList.remove("is-active")
+        })
+
+        const getCategory = () => {
+            fetch("@routes.Category.list()", {
+                credentials: 'include'
+            }).then(res => {return res.json()}).then(json => {
+                const dom = document.querySelector(".dropdown-content")
+                json.forEach(d => {
+                    const option = document.createElement("a")
+                    option.className = "dropdown-item"
+                    option.text = d.name
+
+                    dom.appendChild(option)
+                })
+            })
+        }
+        getCategory()
     </script>
 
     <style>
