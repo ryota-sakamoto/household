@@ -48,17 +48,6 @@
     </div>
 
     <script>
-        const daily_ctx = document.getElementById("daily_chart").getContext("2d")
-        new Chart(daily_ctx, {
-            type: "pie",
-            data: {
-                datasets: [{
-                    data: [1, 2, 4]
-                }],
-                labels: ["1", "2", "4"]
-            }
-        })
-
         flatpickr("#calendar", {
             maxDate: "today",
             defaultDate: ["today"]
@@ -66,10 +55,19 @@
 
         const date = document.getElementById("calendar").value
 
-        fetch(`@routes.Aggregate.date()?date=${date}`, {
+        fetch(`@routes.Aggregate.date(None)?day=${date}`, {
             credentials: 'include'
         }).then((res) => {return res.json()}).then((json) => {
-            console.log(json)
+            const daily_ctx = document.getElementById("daily_chart").getContext("2d")
+            new Chart(daily_ctx, {
+                type: "pie",
+                data: {
+                    datasets: [{
+                        data: json.map((d) => {return d.cost})
+                    }],
+                    labels: json.map((d) => {return d.name})
+                }
+            })
         })
 
         const ctx = document.getElementById("chart").getContext("2d")
