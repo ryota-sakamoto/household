@@ -19,7 +19,9 @@
                         </div>
                         <div class="columns">
                             <div class="column">
-                                <canvas id="daily_chart" width="100" height="50"></canvas>
+                                <div class="chart-container">
+                                    <canvas id="daily_chart" width="100" height="50"></canvas>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -63,9 +65,17 @@
                 type: "pie",
                 data: {
                     datasets: [{
-                        data: json.map((d) => {return d.cost})
+                        data: json.map((d) => {return d.cost}),
+                        backgroundColor: [
+                            "rgb(255, 99, 132)",
+                            "rgb(54, 162, 235)",
+                            "rgb(255, 205, 86)"
+                        ]
                     }],
                     labels: json.map((d) => {return d.name})
+                },
+                options: {
+                    maintainAspectRatio: false,
                 }
             })
         })
@@ -131,8 +141,14 @@
     </script>
 
     <style>
-            body {
-                overflow-x: hidden;
-            }
+        body {
+            overflow-x: hidden;
+        }
+
+        .chart-container {
+            position: relative;
+            width:100%;
+            height:50vh
+        }
     </style>
 }
