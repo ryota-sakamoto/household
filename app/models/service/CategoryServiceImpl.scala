@@ -31,15 +31,20 @@ class CategoryServiceImpl @Inject()(val dbConfigProvider: DatabaseConfigProvider
         )
     }
 
+    override def getLastId(user_id: Int): Future[Option[Int]] = {
+        db.run(categories.filter(_.user_id === user_id).map(_.category_id).max.result)
+    }
+
     private[this] class Categories(tag: Tag) extends Table[Category](tag: Tag, "category") {
         def category_id = column[Int]("category_id")
         def user_id = column[Int]("user_id")
         def name = column[String]("name")
         def memo = column[String]("memo")
+        def color = column[String]("color")
         def created_at = column[Date]("created_at")
         def updated_at = column[Date]("updated_at")
         def deleted_at = column[Option[Date]]("deleted_at")
 
-        def * = (category_id, user_id, name, memo, created_at, updated_at, deleted_at) <> (Category.tupled, Category.unapply)
+        def * = (category_id, user_id, name, memo, color, created_at, updated_at, deleted_at) <> (Category.tupled, Category.unapply)
     }
 }

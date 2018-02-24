@@ -42,6 +42,7 @@
                     </div>
                     <div id="color-picker-box" class="box">
                         <div id="color-picker"></div>
+                        <button class="button is-primary" id="color-submit">OK</button>
                     </div>
                     <button class="button is-link">Submit</button>
                 }
@@ -60,6 +61,10 @@
             showHEX: false
         })
 
+        const hidePicker = () => {
+            color_picker_box.style.display = "none"
+        }
+
         picker.onchange = (p) => {
             const color = p.color
             color_picker_dom.style.backgroundColor = color
@@ -73,19 +78,23 @@
         })
 
         color_picker_dom.addEventListener("focus", (e) => {
+            document.querySelector(".overlay").style.display = ""
             color_picker_box.style.display = ""
         })
+        hidePicker()
 
-        color_picker.addEventListener("touchmove", (e) => {
+        document.getElementById("color-submit").addEventListener("click", (e) => {
             e.preventDefault()
+            hidePicker()
+            document.querySelector(".overlay").style.display = "none"
         })
     </script>
 
     <style>
         #color-picker-box {
             position: absolute;
-            transform: translate(25vw, 0);
-            display: none;
+            transform: translate(12vw, 0);
+            z-index: 2;
         }
     </style>
 }

@@ -48,8 +48,13 @@ class Category @Inject()(silhouette: Silhouette[CookieEnv], categoryService: Cat
         } else {
             val c = form.get
             val date = new Date(System.currentTimeMillis)
-            categoryService.list(request.identity.id).flatMap { list =>
-                val category = models.Category(list.last.id + 1, request.identity.id, c.name, c.memo, date, date, None)
+            val new_id = categoryService.getLastId(request.identity.id).map {
+                case Some(n) => n + 1
+                case None => 1
+            }
+
+            new_id.flatMap { n =>
+                val category = models.Category(n, request.identity.id, c.name, c.memo, c.color, date, date, None)
                 categoryService.register(category).flatMap {
                     case 0 => Future(BadRequest(""))
                     case 1 => Future(Redirect(routes.Category.index()).flashing("message" -> "register success"))
