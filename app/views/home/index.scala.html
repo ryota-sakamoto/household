@@ -66,11 +66,7 @@
                 data: {
                     datasets: [{
                         data: json.map((d) => {return d.cost}),
-                        backgroundColor: [
-                            "rgb(255, 99, 132)",
-                            "rgb(54, 162, 235)",
-                            "rgb(255, 205, 86)"
-                        ]
+                        backgroundColor: json.map((d) => {return d.color})
                     }],
                     labels: json.map((d) => {return d.name})
                 },

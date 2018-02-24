@@ -9,10 +9,10 @@ class AggregateDailyServiceImpl @Inject()(override protected val dbConfigProvide
     // TODO
     def aggregate(date: String): List[DailyData] = {
         List(
-            DailyData("昼ごはん", 500),
-            DailyData("夜ごはん", 800),
-            DailyData("朝ごはん", 300),
-            DailyData("雑貨", 250)
+            DailyData("昼ごはん", 500, "#a4eff2"),
+            DailyData("夜ごはん", 800, "#74b9ff"),
+            DailyData("朝ごはん", 300, "#fab1a0"),
+            DailyData("雑貨", 250, "#b2bec3")
         )
     }
 }

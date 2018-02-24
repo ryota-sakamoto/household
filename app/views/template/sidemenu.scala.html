@@ -1,6 +1,6 @@
 @(active: String = "home")
 
-<div class="column is-one-fifth">
+<div id="side-menu" class="column is-one-fifth">
     <aside class="menu box">
         <p class="menu-label">General</p>
         <ul class="menu-list">
@@ -16,3 +16,11 @@
 <script>
     document.getElementById("@active").classList.add("is-active")
 </script>
+
+<style>
+    @@media screen and (max-width: 769px) {
+        #side-menu {
+            display: none;
+        }
+    }
+</style>
