@@ -16,6 +16,11 @@ POST    /category/:id               controllers.Category.update(id: Int)
 POST    /category/:id/delete        controllers.Category.remove(id: Int)
 
 GET     /scenario                   controllers.Scenario.index
+GET     /scenario/new               controllers.Scenario.registerIndex
+POST    /scenario/new               controllers.Scenario.register
+GET     /scenario/:id/edit          controllers.Scenario.edit(id: Int)
+POST    /scenario/:id               controllers.Scenario.update(id: Int)
+POST    /scenario/:id/delete        controllers.Scenario.remove(id: Int)
 
 GET     /api/category/list          controllers.Category.list
 GET     /api/aggregate/date         controllers.Aggregate.date(day: Option[String])

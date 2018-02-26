@@ -13,4 +13,14 @@ class Scenario @Inject()(silhouette: Silhouette[CookieEnv]) extends InjectedCont
             case None => Redirect(routes.Account.loginIndex()).flashing("message" -> "Login is needed")
         }
     }
+
+    def registerIndex = TODO
+
+    def register = TODO
+
+    def edit(id: Int) = TODO
+
+    def update(id: Int) = TODO
+
+    def remove(id: Int) = TODO
 }
