@@ -1,0 +1,57 @@
+@import com.mohiva.play.silhouette.api.actions.UserAwareRequest
+@import silhouette.CookieEnv
+
+@()(implicit request: UserAwareRequest[CookieEnv, AnyContent])
+
+@template.template("シナリオ一覧") {
+    @template.breadcrumb(List(
+        "Home" -> routes.Home.index().url,
+        "Scenario" -> routes.Scenario.index().url
+    ))
+
+    <div class="columns">
+        @template.sidemenu("scenario")
+        <div class="column">
+            <div class="box">
+                <p class="title is-4">Scenario List</p>
+                @for(i <- 0 until 3) {
+                    <div class="card">
+                        <header class="card-header">
+                            <p class="card-header-title">
+                                Scenario@i
+                            </p>
+                        </header>
+                        <div class="card-content">
+                            <div class="tags">
+                                <span class="tag is-success">Run</span>
+                                <span class="tag is-danger">Stop</span>
+                            </div>
+                            <div class="content">
+                                Description@i
+                            </div>
+                        </div>
+                        <footer class="card-footer">
+                            <a href="#" class="card-footer-item">Stop</a>
+                            <a href="#" class="card-footer-item">Edit</a>
+                            <a href="#" class="card-footer-item">Delete</a>
+                        </footer>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+
+    <style scoped>
+        .card {
+            margin-bottom: 10px;
+        }
+
+        .media-content {
+            overflow-y: hidden;
+        }
+
+        .tags {
+            margin-bottom: 0 !important;
+        }
+    </style>
+}
