@@ -1,7 +1,7 @@
 @import com.mohiva.play.silhouette.api.actions.UserAwareRequest
 @import silhouette.CookieEnv
 
-@()(implicit request: UserAwareRequest[CookieEnv, AnyContent])
+@(list: Seq[models.Scenario])(implicit request: UserAwareRequest[CookieEnv, AnyContent])
 
 @template.template("シナリオ一覧") {
     @template.breadcrumb(List(
@@ -13,26 +13,43 @@
         @template.sidemenu("scenario")
         <div class="column">
             <div class="box">
-                <p class="title is-4">Scenario List</p>
-                @for(i <- 0 until 3) {
+                <p class="title is-4" style="float: left;">Scenario List</p>
+                <a class="button is-primary is-small" style="float: right;" href="@routes.Scenario.registerIndex()">登録</a>
+                @for(scenario <- list) {
                     <div class="card">
                         <header class="card-header">
                             <p class="card-header-title">
-                                Scenario@i
+                                @scenario.name
                             </p>
                         </header>
                         <div class="card-content">
                             <div class="tags">
-                                <span class="tag is-success">Run</span>
-                                <span class="tag is-danger">Stop</span>
+                                @scenario.status match {
+                                    case ScenarioStatus.Stop => {
+                                        <span class="tag is-light">Stop</span>
+                                    }
+                                    case ScenarioStatus.Running => {
+                                        <span class="tag is-success">Run</span>
+                                    }
+                                    case ScenarioStatus.Error => {
+                                        <span class="tag is-danger">Error</span>
+                                    }
+                                }
                             </div>
                             <div class="content">
-                                Description@i
+                                @scenario.description
                             </div>
                         </div>
                         <footer class="card-footer">
-                            <a href="#" class="card-footer-item">Stop</a>
-                            <a href="#" class="card-footer-item">Edit</a>
+                            @scenario.status match {
+                                case ScenarioStatus.Running | ScenarioStatus.Error => {
+                                    <a href="#" class="card-footer-item">Stop</a>
+                                }
+                                case ScenarioStatus.Stop => {
+                                    <a href="#" class="card-footer-item">Run</a>
+                                }
+                            }
+                            <a href="@routes.Scenario.edit(scenario.id)" class="card-footer-item">Edit</a>
                             <a href="#" class="card-footer-item">Delete</a>
                         </footer>
                     </div>
@@ -44,6 +61,7 @@
     <style scoped>
         .card {
             margin-bottom: 10px;
+            clear: both;
         }
 
         .media-content {

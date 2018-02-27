@@ -27,6 +27,7 @@ class SilhouetteModule extends AbstractModule with ScalaModule {
         bind[UserService].to[UserServiceImpl]
         bind[CategoryService].to[CategoryServiceImpl]
         bind[AggregateDailyService].to[AggregateDailyServiceImpl]
+        bind[ScenarioService].to[ScenarioServiceImpl]
         bind[FingerprintGenerator].toInstance(new DefaultFingerprintGenerator(false))
         bind[IDGenerator].toInstance(new SecureRandomIDGenerator())
         bind[Clock].toInstance(Clock())
