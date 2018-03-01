@@ -14,7 +14,7 @@
                     <div class="box">
                         <div class="columns">
                             <div class="column">
-                                <input class="input" id="calendar" type="text">
+                                @template.flatpickr("calendar")
                             </div>
                         </div>
                         <div class="columns">
@@ -50,11 +50,6 @@
     </div>
 
     <script>
-        flatpickr("#calendar", {
-            maxDate: "today",
-            defaultDate: ["today"]
-        })
-
         const chart_container_dom = document.getElementsByClassName("chart-container")[0]
         const calendar_dom = document.getElementById("calendar")
         const createDailyChart = (json) => {

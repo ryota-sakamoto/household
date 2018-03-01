@@ -1,0 +1,22 @@
+@(dom_id: String, mode: String = "single")
+
+<input class="input" id="@dom_id" type="text">
+
+<script>
+    const current_date = new Date()
+    current_date.setDate(1)
+    flatpickr("#@dom_id", {
+        maxDate: "today",
+        mode: "@mode",
+        defaultDate: [
+            @mode match {
+                case "range" => {
+                    current_date, "today"
+                }
+                case _ => {
+                    "today"
+                }
+            }
+        ],
+    })
+</script>

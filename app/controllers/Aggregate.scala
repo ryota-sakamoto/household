@@ -26,7 +26,7 @@ class Aggregate @Inject()(silhouette: Silhouette[CookieEnv], aggregateDailyServi
                 } else {
                     Ok(write(daily_data)).as(ContentTypes.JSON)
                 }
-            case None => BadRequest("")
+            case _ => BadRequest("")
         }
     }
 
