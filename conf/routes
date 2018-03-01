@@ -7,6 +7,9 @@ GET     /logout                     controllers.Account.logout
 
 GET     /admin                      controllers.Admin.index
 
+GET     /detail                     controllers.Detail.index
+GET     /detail/:date               controllers.Detail.show(date: String)
+
 GET     /category                   controllers.Category.index
 GET     /category/new               controllers.Category.registerIndex
 POST    /category/new               controllers.Category.register

@@ -1,0 +1,39 @@
+@import com.mohiva.play.silhouette.api.actions.UserAwareRequest
+@import silhouette.CookieEnv
+
+@()(implicit request: UserAwareRequest[CookieEnv, AnyContent])
+
+@template.template("詳細一覧") {
+    @template.breadcrumb(List(
+        "Home" -> routes.Home.index().url,
+        "Detail List" -> routes.Detail.index().url,
+    ))
+    <div class="columns">
+        @template.sidemenu("detail")
+        <div class="column">
+            <div class="box">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Date</th>
+                            <th>Detail Count</th>
+                            <th>Min</th>
+                            <th>Max</th>
+                            <th>Sum</th>
+                        </tr>
+                    </thead>
+                    <!-- TODO -->
+                    <tbody>
+                        <tr>
+                            <td><a href="@routes.Detail.show("2018-03-01")">2018-03-01</a></td>
+                            <td>24</td>
+                            <td>100円</td>
+                            <td>7200円</td>
+                            <td>24530円</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+}
