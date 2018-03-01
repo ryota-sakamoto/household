@@ -22,8 +22,7 @@ class Aggregate @Inject()(silhouette: Silhouette[CookieEnv], aggregateDailyServi
             case Some(d) if Check.isDate(d) =>
                 val daily_data = aggregateDailyService.aggregate(d)
                 if (daily_data.isEmpty) {
-                    // TODO
-                    Ok("").as(ContentTypes.JSON)
+                    NotFound(write(models.Error("Not Found"))).as(ContentTypes.JSON)
                 } else {
                     Ok(write(daily_data)).as(ContentTypes.JSON)
                 }
