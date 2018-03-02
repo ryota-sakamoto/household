@@ -27,6 +27,7 @@ POST    /scenario/:id/delete        controllers.Scenario.remove(id: Int)
 
 GET     /api/category/list          controllers.Category.list
 GET     /api/aggregate/date         controllers.Aggregate.date(day: Option[String])
+GET     /api/aggregate/date/range   controllers.Aggregate.dateRange(start: Option[String], end: Option[String])
 GET     /api/aggregate/month        controllers.Aggregate.month(type_id: Option[String] ?= None)
 
 GET     /assets/*file               controllers.Assets.at(file)

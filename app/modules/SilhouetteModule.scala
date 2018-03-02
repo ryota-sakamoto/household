@@ -26,7 +26,7 @@ class SilhouetteModule extends AbstractModule with ScalaModule {
         bind[Silhouette[CookieEnv]].to[SilhouetteProvider[CookieEnv]]
         bind[UserService].to[UserServiceImpl]
         bind[CategoryService].to[CategoryServiceImpl]
-        bind[AggregateDailyService].to[AggregateDailyServiceImpl]
+        bind[AggregateService].to[AggregateServiceImpl]
         bind[ScenarioService].to[ScenarioServiceImpl]
         bind[FingerprintGenerator].toInstance(new DefaultFingerprintGenerator(false))
         bind[IDGenerator].toInstance(new SecureRandomIDGenerator())
