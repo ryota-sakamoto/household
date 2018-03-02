@@ -31,7 +31,7 @@
                         </thead>
                         <tbody>
                             <tr v-for="data in range_data">
-                                <td><a :href="data.date">{{ data.date }}</a></td>
+                                <td><a :href="data.url">{{ data.date }}</a></td>
                                 <td>{{ data.count }}</td>
                                 <td>{{ data.min }}円</td>
                                 <td>{{ data.max }}円</td>
@@ -71,7 +71,10 @@
             }).then((res) => {
                 return res.json()
             }).then((json) => {
-                vue.range_data = json
+                vue.range_data = json.map((d) => {
+                    d.url = route.controllers.Detail.show(d.date).url
+                    return d
+                })
             })
         }
         getDataRange(`${createDate(date[0])}`, `${createDate(date[1])}`)
