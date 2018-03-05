@@ -1,0 +1,42 @@
+@import com.mohiva.play.silhouette.api.actions.UserAwareRequest
+@import silhouette.CookieEnv
+
+@(date: String, list: Seq[Item])(implicit request: UserAwareRequest[CookieEnv, AnyContent])
+
+@template.template("詳細") {
+    @template.breadcrumb(List(
+        "Home" -> routes.Home.index().url,
+        "Detail List" -> routes.Detail.index().url,
+        date -> routes.Detail.show(date).url
+    ))
+    <div class="columns">
+        @template.sidemenu("detail")
+        <div class="column">
+            <div class="box">
+                <form>
+                    @for(_ <- 0 to 3) {
+                        <div class="field has-addons">
+                            <p class="control">
+                                <span class="select">
+                                    <select>
+                                        <option>Category</option>
+                                        <option>0</option>
+                                        <option>1</option>
+                                        <option>2</option>
+                                        <option>3</option>
+                                    </select>
+                                </span>
+                            </p>
+                            <p class="control">
+                                <input class="input" type="text" placeholder="Name" required>
+                            </p>
+                            <p class="control">
+                                <input class="input" type="text" placeholder="Value" required>
+                            </p>
+                        </div>
+                    }
+                </form>
+            </div>
+        </div>
+    </div>
+}
