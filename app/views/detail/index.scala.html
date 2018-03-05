@@ -53,7 +53,13 @@
         })
 
         const createDate = (date) => {
-            return `${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate() + 1}`
+            const year = date.getFullYear()
+            const month = String(date.getMonth() + 1)
+            const day = String(date.getDate() + 1)
+            const f = (d) => {
+                return `0${d}`
+            }
+            return `${year}-${month.replace(/^\d$/, f)}-${day.replace(/^\d$/, f)}`
         }
 
         const calendar_dom = document.getElementById("calendar")
@@ -71,10 +77,37 @@
             }).then((res) => {
                 return res.json()
             }).then((json) => {
-                vue.range_data = json.map((d) => {
-                    d.url = route.controllers.Detail.show(d.date).url
-                    return d
-                })
+                const children = flatpickr.days.children
+                let result = []
+                for (let i in flatpickr.days.children) {
+                    const c = children[i]
+                    if (!c.classList) {
+                        continue
+                    }
+
+                    if (c.classList.contains("startRange") || c.classList.contains("inRange") || c.classList.contains("endRange")) {
+                        const data = {
+                            url: route.controllers.Detail.show(createDate(c.dateObj)).url,
+                            date: createDate(c.dateObj),
+                            count: 0,
+                            min: 0,
+                            max: 0,
+                            sum: 0
+                        }
+
+                        if (Object.keys(json).length) {
+                            const json_data =  json.find(d => {return d.date === date})
+                            if (json_data) {
+                                data.count = json_data.count
+                                data.min = json_data.min
+                                data.max = json_data.max
+                                data.sum = json_data.sum
+                            }
+                        }
+                        result.push(data)
+                    }
+                }
+                vue.range_data = result
             })
         }
         getDataRange(`${createDate(date[0])}`, `${createDate(date[1])}`)
